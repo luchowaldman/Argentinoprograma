@@ -1,0 +1,260 @@
+<div>
+                <div>
+                    <div style="display: flex">
+
+                    <div v-for="(value, index) in bits" class="bit" v-on:click="Click_Bit(index)" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                        {{ value }} 
+                   </div>
+               
+                </div>
+                <br>
+
+                <div style="display: flex">
+
+                    <div v-for="(value, index) in lecturadebit.hexadecimales" class="hexadecimal"> 
+                        {{ value }} 
+                   </div>
+               
+                </div>
+
+
+                
+                <div style="display: flex">
+
+                    <div v-for="(value, index) in lecturadebit.caracteres" class="caracter"> 
+                        {{ value.num }} - "{{ value.caracter }}"
+                   </div>
+               
+                </div>
+
+
+                
+                <br>
+
+                <div style="display: flex-start;">
+                    <input type="number" v-model="lecturadebit.numero" v-on:change="cambio_numerobit">
+
+                </div>
+
+                <br>
+                <br>
+
+                
+                <div style="display: flex" v-if="lecturadebit.tipoinstruccion == 'r'">
+                    <div class="parteInstruccion">
+                        <div>
+                            OP: {{ lecturadebit.NroOp }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                    
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            RS: {{ lecturadebit.NroRS }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsRS" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                                        
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            RT: {{ lecturadebit.NroRT }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsRT" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                                        
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            RD: {{ lecturadebit.NroRD }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsRD" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                                        
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            RE: {{ lecturadebit.NroRE }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsRE" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                                        
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            FN: {{ lecturadebit.NroFN }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsFN" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+
+                </div>
+                    
+
+                <div style="display: flex" v-if="lecturadebit.tipoinstruccion == 'i'">
+                    
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            OP: {{ lecturadebit.NroOp }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                    
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            RS: {{ lecturadebit.NroRS }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsRS" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                                        
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            RT: {{ lecturadebit.NroRT }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsRT" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                                        
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            OFFSET: {{ lecturadebit.NroOffSet }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsOffSet" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+
+                </div>
+                    
+
+
+
+                
+                
+                <div style="display: flex" v-if="lecturadebit.tipoinstruccion == 'j'">
+                    
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            OP: {{ lecturadebit.NroOp }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+                    
+                    <div class="parteInstruccion">
+                        
+                        <div>
+                            Target: {{ lecturadebit.NroTarget }}
+                        </div>
+                        <div  style="display: flex">
+                        <div v-for="(value, index) in lecturadebit.BitsTarget" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }"> 
+                            {{ value }} 
+                        </div>
+                        </div>
+                    
+                    </div>
+
+
+
+                </div>
+                    
+
+
+
+                
+                
+
+                
+
+
+
+
+
+            </div>
+
+                
+            <div style="display: flex">
+                {{ lecturadebit.instruccion.code }}
+            
+            </div>  
+
+        </div>
+

@@ -1,0 +1,217 @@
+
+
+.bitsvista0 {
+    align-tex: center;
+    font-size: 400px;
+    border: 1px solid;
+    width: 250px;
+    display: flex;
+    
+}
+
+.bitsvista1 {
+    align-tex: center;
+    font-size: 100px;
+    border: 1px solid;
+    width: 120px;
+    display: flex;
+}
+.vista2 {
+    font-size: 100px;
+}
+.PosicionSeleccionada {
+    border: 3px solid !important;
+    border-color: yellow !important;
+}
+.bitColumna {
+    display: flex;
+    font-size: 10px;
+    border: 3px solid;
+}
+.vista3 {
+    font-size: 30px;
+}
+.decimalvista1 {
+    align-tex: center;
+    font-size: 100px;
+    border: 1px solid;
+}
+
+.decimalvista1 {
+    align-tex: center;
+    font-size: 100px;
+    border: 1px solid;
+}
+.tdvista2 {
+    display: flex;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#CuerpoComputadora {
+    height: 80%;
+    width: 80%;
+}
+#clock {
+    border: 1px solid;
+
+}
+
+#hrzReloj { 
+    width: 40px
+
+}
+#procesador {
+    margin: 10px;
+}
+#memoria {
+    margin: 10px;
+}
+
+.registro {
+    width: 130px;
+    border: 1px solid;
+    padding: 1px;
+    margin: 4px;
+
+}
+
+
+.registroRS {  border: 5px solid aqua;margin: 0px; } 
+.registroRT { border: 5px solid aquamarine;margin: 0px;}
+.registroRD {  border: 5px solid green;margin: 0px;}
+
+
+.grupoSeleccionado {
+    border: 1px solid blue;
+    margin: 0px;
+}
+
+
+.ejecutando {
+    border: 5px solid yellow;
+    margin: 0px;
+} 
+
+.rangocache {
+    width: 100%;
+    transform: rotate(180deg);
+}
+.rangetamgrupo {
+    width: 100%;
+    transform: rotate(180deg);
+}
+.rangotag {
+    width: 100%;
+}
+
+.headerDirCache {
+    height: 45px;
+}
+
+
+.cache {
+    border: 1px solid;
+}
+.parteInstruccionRS {  background-color: aqua; } 
+.parteInstruccionRT {  background-color: aquamarine; }
+.parteInstruccionRD {  background-color: green; }
+
+
+.mininume {
+    width: 35px;
+}
+
+
+
+.bit {
+    width: 10px;
+    height: 20px;
+}
+
+.bitApagado {
+    background-color: black;
+    color: white;
+}
+.bitPrendido {
+
+    background-color: yellow;
+}
+
+.hexadecimal {
+    width: 80px;
+    height: 20px;
+    border: 1px solid;
+
+}
+
+.caracter {
+    width: 160px;
+    height: 20px;
+    border: 1px solid;
+}
+
+.parteInstruccion {
+    border: 1px solid;
+    margin: 1px;
+
+} 
+
+
+.direccionMemoria
+{
+    width: 100px;
+    border: 1px solid;
+    padding-left: 10px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+.inputcache {
+    width: 50px;
+
+}
+
+.valorMemoria {
+    width: 140px;
+    border: 1px solid;
+    ;
+    padding-left: 10px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+.codigoinstruccion
+{
+
+    width: 140px;
+    border: 1px solid;;
+    padding-left: 10px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+.cache {
+    padding: 7px;
+    border: 1px solid;
+}
+
+.bloquecache {
+    padding: 7px;
+    border: 1px solid;
+    display: flex;
+}
+.dirtybloque {
+    background-color: darkgrey;
+}

@@ -1,0 +1,131 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>ComputadoraNode.js</Name>
+    <RootNamespace>ComputadoraNode.js</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>9b3dca82-3fba-485c-9b7b-26c9c8506f48</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>server.js</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>true</StartWebBrowser>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="libman.json" />
+    <Content Include="public\BitsHelper.js" />
+    <Content Include="public\CacheHelper.js" />
+    <Content Include="public\compClock.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\Ejercicios.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\Ejercicios.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\ejerciciosapp.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\InstruccionArgentino.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\index.html" />
+    <Content Include="public\computadora.js" />
+    <Content Include="public\InstArgentino.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\MainApp.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\helper.js" />
+    <Content Include="public\img\clock.png" />
+    <Content Include="public\img\divisorbit.html" />
+    <Content Include="public\VariableHelper.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\compuorga.html" />
+    <Content Include="public\instruccionesdefault.js" />
+    <Content Include="public\InstruccionHelper.js" />
+    <Content Include="public\jquery-3.6.0.min.js" />
+    <Content Include="public\Memoria.html" />
+    <Content Include="public\MemoriaApp.js" />
+    <Content Include="public\memoriachache.js" />
+    <Content Include="public\MEMVirtualHelper.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\Organizacion general del stack.png" />
+    <Content Include="public\palabraHelper.js" />
+    <Content Include="public\ProgramaHelper.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\Seter.js" />
+    <Content Include="public\site.css" />
+    <Content Include="public\Stack.bmp" />
+    <Content Include="public\StackHelper.js" />
+    <Content Include="public\uniciclo.js" />
+    <Content Include="public\vue2.js" />
+    <Content Include="server.js" />
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="public\" />
+    <Folder Include="public\img\" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

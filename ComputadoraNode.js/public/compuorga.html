@@ -1,0 +1,1239 @@
+    <html>
+    <head>
+
+        <link rel="stylesheet" href="site.css">
+
+    </head>
+    <body>
+        <div id="app">
+
+            <script type="text/x-template" id="checkbox-template">
+                <div class="checkbox-wrapper" @click="check">
+
+                </div>
+            </script>
+
+            <div class="">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div id="Clock">
+                            <div>
+                                <input id="hrzReloj" v-model="reloj.Frecuencia"> <select v-model="reloj.MagnitudFrecuencia">
+
+                                    <option value="9">G</option>
+                                    <option value="6">M</option>
+                                    <option value="3">K</option>
+                                </select>Hz
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    CPI: <input v-model="reloj.cpi" v-on:change="CambioCPI" class="inputcache" />
+                                </div>
+                                <div class="col-md-5">
+                                    CI: {{ reloj.ci }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    MIPS: {{ MIPS() }} = Frecuencia / 1x10^6 * CPI
+                                </div>
+                            </div>
+
+
+
+                            <div>
+                                Clocks Transcurridos: {{ reloj.clocks }} = {{ reloj.clocks_calculoteo }} = {{ reloj.clocks_calculo }}
+                            </div>
+                            <div>
+                                Segundos transcurridos: {{ MostrarConOrden(reloj.segundos, reloj.segundosorden) }}s = {{ reloj.segundos_calculoteo }} = {{ reloj.segundos_calculo }}
+                            </div>
+
+                            <button onclick="Controlador.IniciarReloj()">
+                                START
+                            </button>
+
+                            <button onclick="Controlador.PararReloj()">
+                                PAUSA
+                            </button>
+                            <button onclick="Controlador.PulsoReloj()">
+                                CLOCK
+                            </button>
+                        </div>
+                        <div id="Procesador">
+
+
+                            <b>Lee la instruccion</b>
+
+                            <div class="ejecutando" style="display: flex;">
+                                <span class="direccionMemoria"> 0x{{ decimalToHexString(procesador.instruccion_leidanro) }} </span>
+                                <span class="valorMemoria">  {{ procesador.instruccion_leida.numero }} </span>
+                                <span class="codigoinstruccion"> {{ procesador.instruccion_leida.code }} </span>
+                            </div>
+                            <br />
+                            <div>
+                                <b>Y suma uno al PC: </b>{{ procesador.programcont }}
+                            </div>
+
+
+
+                            <div>
+                                <div style="display: flex" v-if="procesador.instruccion_decode.tipoinstruccion == 'r'">
+                                    <div class="parteInstruccion">
+                                        <div>
+                                            OP: {{ procesador.instruccion_decode.NroOp }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="parteInstruccion">
+
+                                        <div class="parteInstruccionRS">
+                                            RS: {{ procesador.instruccion_decode.NroRS }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsRS" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="parteInstruccion">
+
+                                        <div class="parteInstruccionRT">
+                                            RT: {{ procesador.instruccion_decode.NroRT }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsRT" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="parteInstruccion">
+
+                                        <div class="parteInstruccionRD">
+                                            RD: {{ procesador.instruccion_decode.NroRD }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsRD" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="parteInstruccion">
+
+                                        <div>
+                                            RE: {{ procesador.instruccion_decode.NroRE }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsRE" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="parteInstruccion">
+
+                                        <div>
+                                            FN: {{ procesador.instruccion_decode.NroFN }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsFN" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <div style="display: flex" v-if="procesador.instruccion_decode.tipoinstruccion == 'i'">
+
+                                    <div class="parteInstruccion">
+
+                                        <div>
+                                            OP: {{ procesador.instruccion_decode.NroOp }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="parteInstruccion">
+
+                                        <div>
+                                            RS: {{ procesador.instruccion_decode.NroRS }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsRS" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="parteInstruccion">
+
+                                        <div>
+                                            RT: {{ procesador.instruccion_decode.NroRT }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsRT" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="parteInstruccion">
+
+                                        <div>
+                                            OFFSET: {{ procesador.instruccion_decode.NroOffSet }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsOffSet" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+
+                                <div style="display: flex" v-if="procesador.instruccion_decode.tipoinstruccion == 'j'">
+
+                                    <div class="parteInstruccion">
+
+                                        <div>
+                                            OP: {{ procesador.instruccion_decode.NroOp }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="parteInstruccion">
+
+                                        <div>
+                                            Target: {{ procesador.instruccion_decode.NroTarget }}
+                                        </div>
+                                        <div style="display: flex">
+                                            <div v-for="(value, index) in procesador.instruccion_decode.BitsTarget" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                {{ value }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            </div>
+                            <!--
+                    REGISTROS
+                    REGISTROS
+                    REGISTROS
+                    REGISTROS
+                    REGISTROS
+                    REGISTROS
+
+                    -->
+                            <div v-for="(n0, i0) in 8" style="display: flex;">
+                                <div v-for="(n, i) in 4" class="registro"
+                                     v-bind:class="{
+
+                                'registroRS':procesador.instruccion_decode.NroRS==(((i0) * 4) + i)
+                                  , 'registroRT': procesador.instruccion_decode.NroRT==(((i0) * 4) + i)
+                                  , 'registroRD':  procesador.instruccion_decode.NroRD==(((i0) * 4) + i)
+                                }">
+                                    <div>
+                                        <b> {{ procesador.registros[((i0) * 4) + i].nombre }} </b> {{ decimalToHexString(procesador.registros[((i0) * 4) + i].valor) }}
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div>
+                                {{ procesador.instruccion_decode.ejecucion }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div id="Memoria">
+
+                            <div>
+                                <b>Instrucciones</b><input type="checkbox" v-model="viendoprograma" />
+                            </div>
+                            <div>
+
+                                <div v-for="(registro, index) in memoria.instrucciones" v-on:click="click_instruccion(index)">
+                                    <div style="display: flex;"
+                                         v-bind:class="{ 'ejecutando': procesador.instruccion_leidanro == (index * 4)
+
+                                        }">
+                                        <input type="checkbox" v-model="registro.breack" />
+                                        <span class="direccionMemoria">
+                                            0x{{ decimalToHexString(index * 4) }}
+                                        </span>
+                                        <span class="valorMemoria"> 0x{{ decimalToHexString(registro.numero) }} </span>
+                                        <span class="codigoinstruccion"> {{ registro.code }} </span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div>
+                                <b>Datos</b>
+                            </div>
+                            <div v-for="(slack, index) in memoria.slacks">
+                                <div>
+                                    Registros: FP y GP RA si es NO HOJA y S0 a S6
+                                </div>
+
+                                <div v-for="(varia, i) in slack.variables">
+                                    <div v-for="(n,miin) in (varia.valor)" style="display: flex;"
+                                         v-on:click="click_valormemoria(varia.valor[miin])"
+                                         v-bind:class="{ 'ejecutando': posicionMemoriaHexString(varia.posicion, miin) == decimalToHexString(procesador.actividad_registro)
+
+                                        }">
+                                        <span class="direccionMemoria">0x{{ posicionMemoriaHexString(varia.posicion, miin) }}  </span>
+                                        <span class="valorMemoria"> {{ decimalToHexString(varia.valor[miin]) }}</span>
+                                        <span class="codigoinstruccion"> {{  varia.tipo  }} {{varia.nombre }}<span v-if="varia.tam_vector != 1">[{{ varia.tam_vector }}]</span>   </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: block;">
+
+                                <div style="display: flex" v-if="bitsdirememoria">
+                                    <div v-for="(value, index) in bitsdirememoria" class="bit" v-on:click="Click_Bit(index)" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                        {{ value }}
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4" v-if="viendoprograma">
+                        <b>Programa</b>
+
+                        <div v-for="(instruccion, indexinstr) in Programa.Operaciones">
+                            <div>
+                                <instruccionalta v-bind:instruccion="instruccion"></instruccionalta>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+
+
+                        <div v-for="(MiMEMV,  index) in MEMV" class="cache">
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    MMU: UNIDAD DE MANEJO DE MEMORIA
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row">
+                                <div class="col-md-2">LEE LA DIRECCION:</div>
+                                <div class="col-md-5">{{ MiMEMV.direccion }} </div>
+                                <div class="col-md-5">0x{{ decimalToHexString(MiMEMV.direccion) }}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div style="display: flex">
+
+
+                                        <div class="parteInstruccion">
+                                            <div class="headerDirCache">
+                                                {{ MiMEMV.nrodireccionbitsN1 }}
+                                            </div>
+                                            <div style="display: flex">
+                                                <div style="display: flex">
+                                                    <div v-for="mi in MiMEMV.direccionbitsN1" class="bit" v-bind:class="{ 'bitApagado': mi==0, 'bitPrendido': mi==1 }">
+                                                        {{ mi }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="parteInstruccion">
+                                            <div class="headerDirCache">
+                                                {{ MiMEMV.nrodireccionbitsN2 }}
+                                            </div>
+                                            <div style="display: flex">
+                                                <div style="display: flex">
+                                                    <div v-for="mi in MiMEMV.direccionbitsN2" class="bit" v-bind:class="{ 'bitApagado': mi==0, 'bitPrendido': mi==1 }">
+                                                        {{ mi }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="parteInstruccion">
+                                            <div class="headerDirCache">
+                                                {{ MiMEMV.nrodireccionbitsN3 }}
+                                            </div>
+                                            <div style="display: flex">
+                                                <div style="display: flex">
+                                                    <div v-for="mi in MiMEMV.direccionbitsN3" class="bit" v-bind:class="{ 'bitApagado': mi==0, 'bitPrendido': mi==1 }">
+                                                        {{ mi }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="parteInstruccion">
+                                            <div class="headerDirCache">
+                                                {{ MiMEMV.nrooffset}}
+                                            </div>
+                                            <div style="display: flex">
+                                                <div style="display: flex">
+                                                    <div v-for="mi in MiMEMV.bitsoffset" class="bit" v-bind:class="{ 'bitApagado': mi==0, 'bitPrendido': mi==1 }">
+                                                        {{ mi }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-1">{{ MiMEMV.Nivel1 }}</div>
+                                <div class="col-md-11"><input v-model="MiMEMV.Nivel1" v-on:change="cambio_rangoMEMV(MiMEMV)" type="range" name="vol" min="0" max="64"></div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-1">{{ MiMEMV.Nivel2 }}</div>
+                                <div class="col-md-11"><input v-model="MiMEMV.Nivel2" v-on:change="cambio_rangoMEMV(MiMEMV)" type="range" name="vol" min="0" max="64"></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-1">{{ MiMEMV.Nivel3 }}</div>
+                                <div class="col-md-11"><input v-model="MiMEMV.Nivel3" v-on:change="cambio_rangoMEMV(MiMEMV)" type="range" name="vol" min="0" max="64"></div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-1">{{ MiMEMV.Offset }}</div>
+                                <div class="col-md-11">
+                                    <input class="rangetamgrupo" v-on:change="cambio_rangoMEMV(MiMEMV)" v-model="MiMEMV.Offset" type="range" name="vol" min="0" max="64">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">Tam. Bloque: {{ BitsATamanio(MiMEMV.Offset) }}B</div>
+                                <div class="col-md-6">Tam. MEM V: {{ BitsATamanio(MiMEMV.totalbit) }}B</div>
+
+                                <div class="col-md-6">Tam. PTP: <input v-model="MiMEMV.TamPTP" class="inputcache" />B</div>
+                                <div class="col-md-6">Tam. PTE: <input v-model="MiMEMV.TamPTE" class="inputcache" />B</div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-4">Bloques 1: 1</div>
+                                <div class="col-md-4">Bloques 2: {{ cache_bloque2(MiMEMV) }}</div>
+                                <div class="col-md-4">Bloques 3: {{ cache_bloque3(MiMEMV) }}</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">Tam 1: {{ MEMVirtualHelper.TamNivel1(MiMEMV) }} B </div>
+                                <div class="col-md-4">Tam 2: {{ MEMVirtualHelper.TamNivel2(MiMEMV) }}B</div>
+                                <div class="col-md-4">Tam 3: {{ MEMVirtualHelper.TamNivel3(MiMEMV) }}B</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">Total: {{ MEMVirtualHelper.TamTotal(MiMEMV) }} B </div>
+                            </div>
+                        </div>
+
+
+                        <div v-for="(value,  index) in caches" class="cache">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    Bits de Tag: {{ caches[index].nrobits_tag }}
+                                </div>
+                                <div class="col-md-3">
+
+                                    de Index: {{ caches[index].nrobits_index }}
+                                </div>
+                                <div class="col-md-3">
+
+                                    de Offset: {{ caches[index].nrobits_offset }}
+                                </div>
+                                <div class="col-md-3">
+                                    Vias:
+
+                                    <select v-model="caches[index].vias" class="mininume">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="4">4</option>
+                                        <option value="8">6</option>
+                                        <option value="16">16</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    Tamaño de Memoria: {{ TotalMemoriaCache(caches[index]) }}
+                                </div>
+
+                                <div class="col-md-6">
+                                    Tamaño de grupo: {{ BitsATamanio(caches[index].nrobits_offset) }}
+                                </div>
+
+                            </div>
+
+
+                            <div>
+                                <input class="rangetamgrupo" v-on:change="cambio_rangocache(caches[index])" v-model="caches[index].nrobits_offset" type="range" name="vol" min="0" max="32">
+                            </div>
+
+                            <div style="display: flex">
+                                <input type="range" class="rangotag" id="index" v-on:change="cambio_rangocache(caches[index])" v-model="caches[index].nrobits_tag" name="vol" min="0" max="31">
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    Miss Rate =  {{ caches[index].misses }} * 100 / {{ caches[index].lecturas }} = {{ caches[index].missrate }}
+                                </div>
+                                <div class="col-md-6">
+                                    Politica de reemplazo:
+                                    <select v-model="caches[index].politicareemplazo">
+                                        <option value="FIFO">FIFO</option>
+                                        <option value="LRU">LRU</option>
+                                        <option value="RANDOM">RANDOM</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row" v-if="caches[index].bits_tag">
+                                <div class="col-md-2">LEE LA DIRECCION:</div>
+                                <div class="col-md-5">{{ caches[index].direccion }} </div>
+                                <div class="col-md-5">0x{{ decimalToHexString(caches[index].direccion) }}</div>
+
+
+                            </div>
+
+                            <div class="row" v-if="caches[index].bits_tag">
+                                <div class="col-md-2">LEE LA DIRECCION:</div>
+
+
+                                <div class="col-md-8">
+                                    <div style="display: flex">
+                                        <div class="parteInstruccion">
+                                            <div class="headerDirCache">
+                                                {{ caches[index].nro_tag }}
+                                            </div>
+                                            <div style="display: flex">
+                                                <div v-for="(value, index) in caches[index].bits_tag" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                    {{ value }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="parteInstruccion">
+                                            <div class="headerDirCache">
+
+                                                {{ caches[index].nro_index }} / {{ DosALa(caches[index].nrobits_index)  }}
+
+                                            </div>
+                                            <div style="display: flex">
+                                                <div v-for="(value, index) in caches[index].bits_index" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                    {{ value }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="parteInstruccion">
+                                            <div class="headerDirCache">
+                                                {{ caches[index].nro_offset }}
+                                            </div>
+                                            <div style="display: flex">
+                                                <div v-for="(value, index) in caches[index].bits_offset" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                                    {{ value }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div v-if="caches[index].hit_en_via == -1"> MISS</div>
+                                    <div v-if="caches[index].hit_en_via != -1"> HIT</div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row" v-for="(bloque, bindice) in caches[index].bloques" v-if="bloque" v-bind:class="{ 'grupoSeleccionado': bindice==caches[index].nro_index }">
+                                <div class="col-md-2"> {{ bindice }} </div>
+                                <div class="col-md-6">
+                                    <div style="display: flex;">
+
+                                        <div class="bloquecache" v-bind:class="{ 'dirtybloque': vias.is_dirty == 1 }" v-for="(vias, viaindice) in bloque">
+                                            {{ decimalToHexString(vias.tag) }} - {{ decimalToHexString(vias.direccion) }}
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2" v-if="caches[index].quitobloque && bindice==caches[index].nro_index">
+                                    SALE
+                                </div>
+                                <div class="col-md-2" v-if="caches[index].quitobloque && bindice==caches[index].nro_index">
+                                    <div class="bloquecache">
+                                        {{ caches[index].quitobloque.tag }} - {{ caches[index].quitobloque.direccion }}
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    Latencia: <input v-model="caches[index].latencia" class="inputcache" />
+                                    <select v-model="caches[index].latenciaunidad">
+                                        <option value="-9">nano</option>
+                                        <option value="-6">micro</option>
+                                        <option value="-3">mili</option>
+                                    </select> s
+                                </div>
+
+                                <div class="col-md-6">
+                                    Ancho de Banda: <input v-model="caches[index].anchobanda" class="inputcache" />
+                                    <select v-model="caches[index].anchobandaunidad">
+
+                                        <option value="9">G</option>
+                                        <option value="6">M</option>
+                                        <option value="3">K</option>
+                                    </select>Hz
+                                </div>
+
+                                <div class="col-md-4">
+                                    Tiempo : {{ TiempoBloque(caches[index]) }} s
+                                </div>
+
+                                <div class="col-md-4">
+                                    Miss Penalty : {{ MissPenalty(caches[index]) }}
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    Miss Escritura: <input type="checkbox" v-model="caches[index].missescritura" />
+                                    <span v-if="!caches[index].missescritura">write through y no-write allocate</span>
+                                    <span v-if="caches[index].missescritura">write back y write allocate</span>
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    Escritura: <input v-model="caches[index].tarda_escribir" class="inputcache" />
+                                    <select v-model="caches[index].tarda_escribirorden">
+                                        <option value="-9">nano</option>
+                                        <option value="-6">micro</option>
+                                        <option value="-3">mili</option>
+                                    </select> s
+                                </div>
+
+                                <div class="col-md-4">
+                                    Clocks Escritura : {{ ClocksEscritura(caches[index]) }}
+                                </div>
+
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+
+
+
+
+                    <h1> 32 BITS</h1>
+
+
+
+
+                    <div style="border: 1px solid; margin-left: 100px">
+                        <div>
+                            <div style="display: flex">
+
+                                <div v-for="(value, index) in bits" class="bit" v-on:click="Click_Bit(index)" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                    {{ value }}
+                                </div>
+                                <button type="button" style="display: inline" v-on:click="leerdireccion" />LEER DIRECCION</button >
+
+                            </div>
+                            <br>
+
+                            <div style="display: flex">
+
+                                <div v-for="(value, index) in lecturadebit.hexadecimales" class="hexadecimal">
+                                    {{ value}}
+                                </div>
+                            </div>
+
+
+
+                            <div style="display: flex">
+
+                                <div v-for="(value, index) in lecturadebit.caracteres" class="caracter">
+                                    {{ value.num }} - "{{ value.caracter }}"
+                                </div>
+
+                            </div>
+
+
+
+                            <br>
+
+                            <div style="display: flex-start;">
+                                <input type="number" v-model="lecturadebit.numero" v-on:change="cambio_numerobit">
+
+                            </div>
+
+                            <br>
+                            <br>
+
+
+                            <div style="display: flex" v-if="lecturadebit.tipoinstruccion == 'r'">
+                                <div class="parteInstruccion">
+                                    <div>
+                                        OP: {{ lecturadebit.NroOp }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        RS: {{ lecturadebit.NroRS }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsRS" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        RT: {{ lecturadebit.NroRT }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsRT" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        RD: {{ lecturadebit.NroRD }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsRD" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        RE: {{ lecturadebit.NroRE }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsRE" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        FN: {{ lecturadebit.NroFN }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsFN" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+
+                            <div style="display: flex" v-if="lecturadebit.tipoinstruccion == 'i'">
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        OP: {{ lecturadebit.NroOp }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        RS: {{ lecturadebit.NroRS }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsRS" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        RT: {{ lecturadebit.NroRT }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsRT" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        OFFSET: {{ lecturadebit.NroOffSet }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsOffSet" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+
+
+
+                            <div style="display: flex" v-if="lecturadebit.tipoinstruccion == 'j'">
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        OP: {{ lecturadebit.NroOp }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsOP" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="parteInstruccion">
+
+                                    <div>
+                                        Target: {{ lecturadebit.NroTarget }}
+                                    </div>
+                                    <div style="display: flex">
+                                        <div v-for="(value, index) in lecturadebit.BitsTarget" class="bit" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                            {{ value }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+                        <div style="display: flex">
+                            {{ lecturadebit.instruccion.code }}
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+            <template id="instruccionalta-template">
+                <div v-bind:class="{ 'ejecutando': procesador.instruccion_leidanro>=(instruccion.posicion * 4) &&  procesador.instruccion_leidanro<(instruccion.posicion_hasta * 4) }">
+
+
+                    <div class="row" v-if="instruccion.nombre =='ASIGNACION'">
+                        <div class="col-md-12">
+                            {{ NombreVariable(instruccion.variable) }} = {{ instruccion.valor }}
+                        </div>
+                    </div>
+
+                    <div class="row" v-if="instruccion.nombre =='GOTO'">
+                        <div class="col-md-12">
+                            GOTO {{ instruccion.nroinstruccion  }}
+                        </div>
+                    </div>
+
+                    <div class="row" v-if="instruccion.nombre =='INME'">
+                        <div class="col-md-12">
+                            {{ NombreVariable(instruccion.variable1) }} = {{ NombreVariable(instruccion.variable2) }} {{ instruccion.operacion }} {{ instruccion.inmediato }}
+                        </div>
+                    </div>
+
+                    <div class="row" v-if="instruccion.nombre =='VARIA'">
+                        <div class="col-md-12">
+                            {{ NombreVariable(instruccion.variable1) }} = {{ NombreVariable(instruccion.variable2) }} {{ instruccion.operacion }} {{ NombreVariable(instruccion.variable3) }}
+                        </div>
+                    </div>
+
+                    <div v-if="instruccion.nombre =='CICLO'">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                INICIO
+                            </div>
+
+                            <div class="col-md-10">
+
+                                <instruccionalta v-for="inicial in instruccion.inicio_ope" v-bind:instruccion="inicial"></instruccionalta>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                CICLO
+                            </div>
+
+                            <div class="col-md-10">
+                                <instruccionalta v-for="ciclo in instruccion.ciclo" v-bind:instruccion="ciclo"></instruccionalta>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                FIN CICLO
+                            </div>
+
+                            <div class="col-md-10">
+                                <instruccionalta v-for="ciclo in instruccion.finciclo" v-bind:instruccion="ciclo"></instruccionalta>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                MIENTRAS
+                            </div>
+                            <div class="col-md-10">
+                                {{ NombreVariable(instruccion.variable1) }} {{ instruccion.operacion }} {{ NombreVariable(instruccion.variable2) }}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div v-if="instruccion.nombre == 'ASS'">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                Assembly:
+                            </div>
+
+                            <div class="col-md-10">
+                                <div class="row" v-for="ins in instruccion.assembly">
+
+                                    <div class="col-md-12">
+                                        {{ ins.code }}
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div v-if="instruccion.nombre =='IF'">
+
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                IF
+                            </div>
+                            <div class="col-md-10">
+                                {{ NombreVariable(instruccion.variable1) }} {{ instruccion.operacion }} {{ NombreVariable(instruccion.variable2) }}
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+
+                            </div>
+
+                            <div class="col-md-10">
+                                <instruccionalta v-for="ciclo in instruccion.ope_ver" v-bind:instruccion="ciclo"></instruccionalta>
+                            </div>
+                        </div>
+                        <div class="row" v-if="instruccion.ope_else">
+                            <div class="col-md-2">
+                                ELSE
+                            </div>
+
+                            <div class="col-md-10">
+                                <instruccionalta v-for="ciclo in instruccion.ope_else" v-bind:instruccion="ciclo"></instruccionalta>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </template>
+
+
+
+
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+            <!-- Optional theme -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+            <!-- Latest compiled and minified JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+            <script src="vue2.js"></script>
+            <script src="helper.js"></script>
+            <script src="InstruccionHelper.js"></script>
+            <script src="uniciclo.js"></script>
+            <script src="instruccionesdefault.js"></script>
+            <script src="MEMVirtualHelper.js"></script>
+            <script src="ProgramaHelper.js"></script>
+            <script src="BitsHelper.js"></script>
+            <script src="Seter.js"></script>
+            <script src="CacheHelper.js"></script>
+            <script src="StackHelper.js"></script>
+            <script src="palabraHelper.js"></script>
+            <script src="computadora.js"></script>
+</body>
+</html>

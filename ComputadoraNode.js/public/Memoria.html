@@ -1,0 +1,360 @@
+<html>
+<head>
+
+    <link rel="stylesheet" href="site.css">
+
+</head>
+<body>
+    <div id="memoria">
+        <div v-if="vista==0">
+            <h2>El bit</h2>
+            <div class="bitsvista0" v-bind:class="{ 'bitApagado': bits[31]==0, 'bitPrendido': bits[31]==1 }" v-on:click="click_bit(31)">  {{ bits[31] }}</div>
+        </div>
+        <div v-if="vista==1" style="display: flex">
+            <h2>2 bits</h2>
+            <div class="bitsvista0" v-bind:class="{ 'bitApagado': bits[30]==0, 'bitPrendido': bits[30]==1 }" v-on:click="click_bit(30)">  {{ bits[30] }}</div>
+            <div class="bitsvista0" v-bind:class="{ 'bitApagado': bits[31]==0, 'bitPrendido': bits[31]==1 }" v-on:click="click_bit(31)">  {{ bits[31] }}</div>
+            <div class="bitsvista0">  = </div>
+            <div class="bitsvista0">  {{ (bits[30] * 2) +  bits[31] }}</div>
+        </div>
+
+        <div v-if="vista==2">
+
+            <h2>4 bits.</h2>
+            <table width="100%" class="vista2">
+                <tr>
+                    <td v-for="(value, index) in bits" v-on:click="click_bit(index)" v-if="index>27" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                        {{ value }}
+                    </td>
+                    <td rowspan="2">=</td>
+                    <td v-for="(value, index) in decimales">
+                        {{ value }}
+                    </td>
+                    <td rowspan="2">=</td>
+                    <td rowspan="2">{{  hexadecimales[1] }}</td>
+                </tr>
+
+                <tr>
+                    <td v-for="(value, index) in bits" v-on:click="click_bit(index)" v-if="index>27" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                        x{{ Math.pow(2, 31 - index) }}
+                    </td>
+                    <td v-for="(value, index) in decimales">
+                        x{{  Math.pow(10, decimales.length - index - 1)  }}
+
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+
+        <div v-if="vista==3">
+            <h2>El BYTE, 8 Bits</h2>
+
+            <table width="100%" class="vista3">
+                <tr>
+                    <td v-for="(value, index) in bits" v-on:click="click_bit(index)" v-if="index>23" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                        {{ value }}
+
+                    </td>
+                    <td rowspan="2">=</td>
+
+                    <td>
+                        <input v-model="decimales[0]" v-on:change="Cambio_Decimal()" type="number" min="0" max="9" />
+                    </td>
+                    <td>
+                        <input v-model="decimales[1]" v-on:change="Cambio_Decimal()" type="number" min="0" max="9" />
+                    </td>
+                    <td>
+                        <input v-model="decimales[2]" v-on:change="Cambio_Decimal()" type="number" min="0" max="9" />
+                    </td>
+
+
+                    <td rowspan="2">=</td>
+                    <td rowspan="2">
+
+
+
+                        <select v-model="hexadecimales[0]" v-on:change="Cambio_Hexa()">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="a">a</option>
+                            <option value="b">b</option>
+                            <option value="c">c</option>
+                            <option value="d">d</option>
+                            <option value="e">e</option>
+                            <option value="f">f</option>
+                        </select>
+
+
+
+                        <select v-model="hexadecimales[1]" v-on:change="Cambio_Hexa()">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="a">a</option>
+                            <option value="b">b</option>
+                            <option value="c">c</option>
+                            <option value="d">d</option>
+                            <option value="e">e</option>
+                            <option value="f">f</option>
+                        </select>
+
+
+                    </td>
+
+                    <td rowspan="2">=</td>
+                    <td rowspan="2">{{  ascii }}</td>
+
+
+                </tr>
+
+                <tr>
+                    <td v-for="(value, index) in bits" v-on:click="click_bit(index)" v-if="index>23" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                        x{{ Math.pow(2, 31 - index) }}
+                    </td>
+                    <td v-for="(value, index) in decimales">
+                        x{{  Math.pow(10, decimales.length - index - 1)  }}
+
+                    </td>
+                </tr>
+
+            </table>
+
+            <div class="row">
+                <div class="col-md-1" v-bind:class="{ 'bitPrendido': ind==viendo_numero }" v-on:click="click_char(ind)" v-for="(val, ind) in tablaasci">{{ ind }} : {{ val }} </div>
+            </div>
+
+        </div>
+
+
+
+        <div v-if="vista==4">
+
+            <h2>La memoria</h2>
+
+
+            <table>
+                <tr>
+                    <td colspan="8">Direccion</td>
+                    <td></td>
+                    <td>Valor</td>
+                    <td></td>
+                </tr>
+                <tr>
+
+                    <td v-for="(value, index) in bits_posicion" v-on:click="click_direccion(index)" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                        {{ value }}
+                    </td>
+
+                    <td><input v-model="NumeroDireccion" v-on:change="CambioNumeroDireccion" type="number" min="0" max="255" /></td>
+                    <td>
+
+
+                        <table width="100%" class="vista4">
+                            <tr>
+                                <td v-for="(value, index) in bits" v-on:click="click_bit(index)" v-if="index>23" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                                    {{ value }}
+
+                                </td>
+                                <td rowspan="2">=</td>
+
+                                <td>
+                                    <input v-model="decimales[0]" v-on:change="Cambio_Decimal()" type="number" min="0" max="9" />
+                                </td>
+                                <td>
+                                    <input v-model="decimales[1]" v-on:change="Cambio_Decimal()" type="number" min="0" max="9" />
+                                </td>
+                                <td>
+                                    <input v-model="decimales[2]" v-on:change="Cambio_Decimal()" type="number" min="0" max="9" />
+                                </td>
+
+
+                                <td rowspan="2">=</td>
+                                <td rowspan="2">
+
+
+
+                                    <select v-model="hexadecimales[0]" v-on:change="Cambio_Hexa()">
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="a">a</option>
+                                        <option value="b">b</option>
+                                        <option value="c">c</option>
+                                        <option value="d">d</option>
+                                        <option value="e">e</option>
+                                        <option value="f">f</option>
+                                    </select>
+
+
+
+                                    <select v-model="hexadecimales[1]" v-on:change="Cambio_Hexa()">
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="a">a</option>
+                                        <option value="b">b</option>
+                                        <option value="c">c</option>
+                                        <option value="d">d</option>
+                                        <option value="e">e</option>
+                                        <option value="f">f</option>
+                                    </select>
+
+
+                                </td>
+
+                                <td rowspan="2">=</td>
+                                <td rowspan="2">{{  ascii }}</td>
+
+
+                            </tr>
+
+
+                        </table>
+                    </td>
+                    <td><button v-on:click="EscribirByte">Escribir</button></td>
+
+
+
+                </tr>
+            </table>
+            <div style="display:flex">
+
+                <div>
+                    <div v-for="(columna, id_columna) in memoria">
+
+                        <div class="bitColumna">
+
+                            <div v-for="(posicion, id_posicion) in columna" class="bitColumna" v-bind:style="Estilo_Sector(id_columna, id_posicion)" v-on:click="Click_Sector(id_columna, id_posicion) " v-bind:class="{ 'PosicionSeleccionada': id_posicion == NumPos &&  id_columna == NumCol  }">
+
+
+                                <div v-for="(v, i) in posicion" v-bind:class="{ 'bitApagado': v==0, 'bitPrendido': v==1 }">
+                                    {{ v }}
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <table>
+                        <tr v-if="variables.length > 0">
+                            <th>NOMBRE</th>
+                            <th>TIPO</th>
+                            <th>LARGO</th>
+                        </tr>
+                        <template v-for="(variable, index) in variables">
+
+                            <tr>
+                                <td><input v-on:change="pintarmemoria()" v-model="variables[index].nombre" /> </td>
+                                <td>
+                                    <select v-on:change="pintarmemoria()" v-model="variables[index].tipo">
+                                        <option value="Binario">Binario</option>
+                                        <option value="Caracter">Caracter</option>
+                                        <option value="Entero16">Entero16</option>
+                                        <option value="Entero32">Entero32</option>
+                                        <option value="Flotante">Flotante</option>
+                                    </select>
+
+                                </td>
+                                <td><input v-on:change="pintarmemoria()" type="number" min="1" v-model="variables[index].largo" /> </td>
+                                <td><input v-on:change="pintarmemoria()" type="color" v-model="variables[index].color" /> </td>
+                                <td><button v-on:click="variables[index].editar = !variables[index].editar"> EDITAR </button> </td>
+                            </tr>
+                            <tr v-if="variables[index].editar && (variables[index].largo > 1 &&  variables[index].tipo != 'char')">
+                                <td colspan="1">Indice<input type="number" min="0" v-bind:max="variables[index].largo - 1" v-model="variables[index].indice" /></td>
+                                <td colspan="3">Valor <input v-model="variables[index].valor[variables[index].indice]" v-on:change="Cambio_Variable(index, variables[index].indice)"/></td>
+                            </tr>
+                            <tr v-if="variables[index].editar && (variables[index].largo == 1 ||  variables[index].tipo == 'Caracter')">
+                                <td colspan="4">
+                                    Valor
+                                    <input v-if="variables[index].tipo == 'Entero16' || variables[index].tipo == 'Entero32'" type="number" v-model="variables[index].valor[0]" v-on:change="Cambio_Variable(index, 0)" />
+                                    <input v-if="variables[index].tipo == 'Caracter' || variables[index].tipo == 'Flotante'" v-model="variables[index].valor[0]" v-on:change="Cambio_Variable(index, 0)" />
+                                    <input v-if="variables[index].tipo == 'Binario'" type="checkbox" v-model="variables[index].valor[0]" v-on:change="Cambio_Variable(index, 0)" />
+
+                                </td>
+                            </tr>
+                        </template>
+                        <tr>
+                            <td><button v-on:click="Click_NuevaVariable()">Nueva Variable</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <table width="50%" class="vista3">
+                <tr>
+                    <td v-for="(value, index) in leyendobits" v-bind:class="{ 'bitApagado': value==0, 'bitPrendido': value==1 }">
+                        {{ value }}
+
+                    </td>
+                    </table>
+        </div>
+
+        <div v-if="vista == 5">
+            <a href="index.html">Ver como funciona una computadora </a>
+
+        </div>
+
+
+        <div style="display: block">
+            Vista: <input v-model="vista" v-on:change="Cambio_Vista()" type="number" min="0" max="5" />
+
+        </div>
+
+        <div v-if="vista==2">
+            sistema de numeración de base 2, <a target="_blank" href="https://es.wikipedia.org/wiki/Sistema_de_numeraci%C3%B3n_decimal">10</a>  y 16.
+        </div>
+
+
+
+    </div>
+
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="vue2.js"></script>
+    <script src="helper.js"></script>
+    <script src="BitsHelper.js"></script>
+    <script src="VariableHelper.js"></script>
+    <script src="MemoriaApp.js"></script>
+</body>
+</html>

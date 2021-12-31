@@ -1,0 +1,194 @@
+<html>
+<head>
+
+    <link rel="stylesheet" href="site.css">
+
+</head>
+<body>
+    <div id="mainapp" width="100%">
+
+        <table width="100%">
+            <tr>
+                <th width="20%"><a target="_blank" href="Memoria.html">0 y 1 y memoria</a></th>
+                <th width="20%"><a target="_blank" href="compuorga.html">La computadora</a></th>
+
+                <th width="20%">PROGRAMAR</th>
+                <th width="20%">EJERCICIOS</th>
+                <th width="20%">Ayuda</th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>{{ ejercicio.nombre }}</h2>
+                            <p>{{ ejercicio.enunciado }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1>Argentino</h1>
+                            <div>
+                                La funcion <input v-model="nombre_funcion" />
+
+                                <div style="display: flex">
+                                    Devuelve <variablecomp v-bind:variable="retorno"></variablecomp>
+                                </div>
+
+                                parametros:
+                                <div v-for="(parametro, inx_param) in parametros" style="display: flex">
+                                    <variablecomp v-bind:variable="parametro"></variablecomp>
+                                    <span>X</span>
+                                </div>
+                                <button v-on:click="NuevoParametro()">Nuevo Parametro</button>
+
+
+                                variables:
+                                <div v-for="(varia, inx_param) in variables" style="display: flex">
+                                    <variablecomp v-bind:variable="varia"></variablecomp>
+                                    <span>X</span>
+                                </div>
+                                <button v-on:click="NuevaVariable()">Nueva Variable</button>
+                                Ejecuta
+
+                                <div v-for="(instruccion, indexinstr) in instrucciones" style="display: flex">
+
+                                    <div v-for="col, i) in instruccion.colores_anteriores" v-bind:style="ClaseColor(col)">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div v-bind:class="{ 'ejecutando': 0 == 1 }" style="display: flex;">
+                                        <select v-on:change="ForzarActualizar()" v-model="instruccion.tipo">
+                                            <option value="Asignar">Asignar</option>
+                                            <option value="Sipasa">Si Pasa</option>
+                                            <option value="Ciclo">Ciclo</option>
+                                            <option value="OSiPasa" v-if="instruccion.con_if > 0">O Si Pasa</option>
+                                            <option value="OSiNo" v-if="instruccion.con_if > 0">O Si no</option>
+                                            <option value="Despues" v-if="instruccion.con_if > 0">Despues</option>
+                                            <option value="FinCiclo" v-if="instruccion.con_ciclo > 0">Fin Ciclo</option>
+                                        </select>
+
+                                        <div style="display: flex;" v-if="instruccion.tipo=='Asignar'">
+                                            <select v-model="instruccion.AsignaVariable">
+                                                <option value="">Sin Asignar</option>
+                                                <option value="retorno">retorno</option>
+                                                <option v-for="(vari, indvar) in Datos.variables" v-bind:value="vari.nombre">{{ vari.nombre }}</option>
+                                                <option v-for="(vari, indvar) in Datos.parametros" v-bind:value="vari.nombre">{{ vari.nombre }}</option>
+                                            </select>
+                                            =
+                                        </div>
+
+                                        <select v-model="instruccion.Variable1"
+                                                v-if="(instruccion.tipo!='FinCiclo') && (instruccion.tipo!='Despues')"
+                                                v-on:change="ForzarActualizar()">
+                                            <option value="">Valor</option>
+                                            <option v-for="(vari, indvar) in Datos.variables" v-bind:value="vari.nombre">{{ vari.nombre }}</option>
+                                            <option v-for="(vari, indvar) in Datos.parametros" v-bind:value="vari.nombre">{{ vari.nombre }}</option>
+                                        </select>
+                                        <input v-model="instruccion.Variable1Valor" v-if="instruccion.Variable1==''
+                                               && ((instruccion.tipo!='FinCiclo') && (instruccion.tipo!='Despues')) " />
+
+
+                                        <select v-model="instruccion.operacion"
+                                                v-if="(instruccion.tipo!='FinCiclo') && (instruccion.tipo!='Despues')" v-on:change="ForzarActualizar()">
+                                            <option value=""></option>
+                                            <option value="+">+</option>
+                                            <option value="-">-</option>
+                                            <option value="*">*</option>
+                                            <option value="/">/</option>
+                                            <option value="%">%</option>
+                                            <option value=">">></option>
+                                            <option value="<"><</option>
+                                            <option value="==">==</option>
+                                            <option value="Y">Y</option>
+                                            <option value="O">O</option>
+                                            <option value="NO">NO</option>
+                                        </select>
+                                        <select v-model="instruccion.Variable2" v-if="instruccion.operacion != '' && instruccion.operacion != 'NO'" v-on:change="ForzarActualizar()">
+                                            <option value="">Valor</option>
+                                            <option v-for="(vari, indvar) in Datos.variables" v-bind:value="vari.nombre">{{ vari.nombre }}</option>
+                                            <option v-for="(vari, indvar) in Datos.parametros" v-bind:value="vari.nombre">{{ vari.nombre }}</option>
+                                        </select> 
+                                        
+
+                                        <input v-model="instruccion.Variable1Valor" v-if="(instruccion.Variable2=='' && instruccion.operacion != '' && instruccion.operacion != 'NO')
+
+
+                                               && ((instruccion.tipo!='FinCiclo') && (instruccion.tipo!='Despues'))" />
+                                        <input v-model="instruccion.color" t v-on:change="ForzarActualizar()" type="color" v-if="instruccion.tipo=='Sipasa' || instruccion.tipo=='Ciclo'" />
+
+                                    </div>
+
+
+
+                                    <div>
+                                        <instruccionalta v-bind:instruccion="indexinstr"></instruccionalta>
+                                    </div>
+
+                                </div>
+                                <button v-on:click="NuevaInstruccion()">Nueva Instruccion</button>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <select>
+                                <option>C++</option>
+                                <option>Visual Basic</option>
+                                <option>Phyton</option>
+                                <option>Java</option>
+                                <option>JavaScript</option>
+                                <option>Arduino</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+
+
+
+    <template id="variablecomp-template">
+        <div style="display: flex">
+
+            <div><input v-model="variable.nombre" /> </div>
+            <div>
+                <select v-model="variable.tipo">
+                    <option value="Binario">Binario</option>
+                    <option value="Caracter">Caracter</option>
+                    <option value="Entero16">Entero16</option>
+                    <option value="Entero32">Entero32</option>
+                    <option value="Flotante">Flotante</option>
+                </select>
+            </div>
+
+            <div>de <input type="number" min="1" v-model="variable.largo" /> </div>
+
+        </div>
+
+    </template>
+    <template id="instruccionalta-template">
+
+
+    </template>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="vue2.js"></script>
+    <script src="helper.js"></script>
+    <script src="BitsHelper.js"></script>
+    <script src="VariableHelper.js"></script>
+    <script src="InstruccionArgentino.js"></script>
+    <script src="Ejercicios.js"></script>
+    <script src="InstArgentino.js"></script>
+    <script src="MainApp.js"></script>
+</body>
+</html>
